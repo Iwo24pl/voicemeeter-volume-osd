@@ -1,0 +1,87 @@
+name: Bug report
+description: Something is not working in the popup, tray icon or Voicemeeter connection
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. If possible, attach
+        `%LOCALAPPDATA%\VoiceMeeterPopup\app.log` (Settings → Connection →
+        Open log file) and the output of `python -m app --selftest`.
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start Voicemeeter ...
+        2. Move the A1 fader ...
+        3. ...
+    validations:
+      required: true
+
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      placeholder: Windows 11 24H2 (26100)
+    validations:
+      required: true
+
+  - type: input
+    id: voicemeeter
+    attributes:
+      label: Voicemeeter edition and version
+      placeholder: Banana 2.1.2.2 (Settings → Connection shows this)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install
+    attributes:
+      label: How are you running the app?
+      options:
+        - From source (python main.py)
+        - Prebuilt VoiceMeeterPopup.exe
+        - Built it myself with build_exe.bat
+    validations:
+      required: true
+
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Watching mode
+      options:
+        - Any fader that moves
+        - Only the selected channel
+        - Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: Log and self-test output
+      description: Paste the relevant log lines or attach the file.
+      render: text
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Checklist
+      options:
+        - label: I am running the Voicemeeter GUI, not only the audio engine
+          required: true
+        - label: My Python/executable bitness matches Voicemeeter (64-bit by default)
+          required: false
+        - label: I have not modified Voicemeeter files or the app to add write/keyboard access
+          required: false
