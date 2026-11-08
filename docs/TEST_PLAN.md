@@ -21,7 +21,11 @@ premultiplied alpha and BGRA byte layout.
 `tests/test_controller.py` — with an injected fake client:
 change → one `level` event; idle → none; target mode reads only the selected
 channel; any mode reads every channel; mute change reported; `-2` detected as a
-disconnect and reconnected; changing the target announces the new channel.
+disconnect and reconnected; changing the target announces the new channel; the
+configured 100 % reference drives the percentage.
+`tests/test_tray.py` — the tray menu is built against a fake app: every enabled
+action resolves, Settings opens the window, the target submenu selects a
+channel.
 
 `--selftest` additionally exercises:
 
@@ -128,6 +132,6 @@ not steal focus (type in Notepad while it shows), and does not block clicks
   afterwards.
 * With the channel at 0.0 dB the popup reads exactly 100 %.
 * `--selftest`: all checks PASS, including read access to 5 strips / 5 buses.
-* 38 unit tests pass.
+* 41 unit tests pass (including tray menu wiring).
 * Single-instance hand-off, settings tabs, tray startup and reconnect logic
   exercised manually.

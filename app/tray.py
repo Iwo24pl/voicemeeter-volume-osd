@@ -63,7 +63,7 @@ class TrayIcon:
     def __init__(self, post: Callable[[Callable[[], None]], None], actions):
         """``post`` marshals a callable onto the Tk thread.
 
-        ``actions`` provides: settings(), preview_osd(), reconnect(), toggle_mute(),
+        ``actions`` provides: show_settings(), preview_osd(), reconnect(),
         set_target(kind, index), set_autostart(bool), open_config_folder(),
         open_log(), quit().
         """
@@ -146,7 +146,7 @@ class TrayIcon:
                 None, enabled=False))
         items += [
             pystray.Menu.SEPARATOR,
-            pystray.MenuItem("Settings…", lambda *_: run(self._actions.settings), default=True),
+            pystray.MenuItem("Settings…", lambda *_: run(self._actions.show_settings), default=True),
             pystray.MenuItem("Target", self._target_menu()),
             pystray.MenuItem("Show test popup", lambda *_: run(self._actions.preview_osd)),
             pystray.MenuItem("Reconnect", lambda *_: run(self._actions.reconnect)),

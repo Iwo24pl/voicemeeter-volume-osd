@@ -18,6 +18,18 @@ _LOG = logging.getLogger("voicemeeter_popup")
 APP_ID = "VoiceMeeterPopup"
 
 
+def _out(message: str = "") -> None:
+    """print() for consoles; falls back to the log in a --windowed build."""
+    if sys.stdout is not None:
+        try:
+            print(message)
+        except Exception:
+            pass
+    else:
+        _LOG.info(message)
+
+
+
 # ------------------------------------------------------------------ logging
 def setup_logging(verbose: bool = False) -> None:
     handlers: list[logging.Handler] = []
@@ -60,7 +72,7 @@ def write_previews(folder: str) -> int:
         background = Image.new("RGBA", image.size, (30, 32, 38, 255))
         background.alpha_composite(image)
         background.convert("RGB").save(target / filename)
-    print(f"Wrote {len(cases)} previews to {target}")
+    _out(f"Wrote {len(cases)} previews to {target}")
     return 0
 
 
@@ -116,13 +128,13 @@ def selftest(demo: bool) -> int:
 
     def record(name: str, status: str, detail: str = "") -> None:
         results.append((status, name, detail))
-        print(f"[{status:<4}] {name}" + (f" — {detail}" if detail else ""))
+        _out(f"[{status:<4}] {name}" + (f" — {detail}" if detail else ""))
 
-    print(f"VoiceMeeter Volume OSD {__version__} — self test")
-    print(f"Python {sys.version.split()[0]} ({'64' if sys.maxsize > 2**32 else '32'}-bit)"
+    _out(f"VoiceMeeter Volume OSD {__version__} — self test")
+    _out(f"Python {sys.version.split()[0]} ({'64' if sys.maxsize > 2**32 else '32'}-bit)"
           f"  ·  DPI {system_dpi()}")
-    print(f"Config folder: {data_dir()}")
-    print()
+    _out(f"Config folder: {data_dir()}")
+    _out()
 
     # 1. config round trip
     try:
@@ -167,7 +179,7 @@ def selftest(demo: bool) -> int:
                 raise VoicemeeterDllNotFound(
                     "VoicemeeterRemote DLL not found. Notes:\n  " + "\n  ".join(notes[-6:])
                 )
-            print(f"Remote DLL: {path}")
+            _out(f"Remote DLL: {path}")
             client = RealClient(cfg.connection)
             try:
                 info = client.connect()
@@ -186,10 +198,10 @@ def selftest(demo: bool) -> int:
                         suffix = f"{gain:+6.1f} dB" + ("   [muted]" if muted else "")
                     except Exception:
                         suffix = "n/a"
-                    print(f"    {channel.base:<10} {channel.display:<52} {suffix}")
+                    _out(f"    {channel.base:<10} {channel.display:<52} {suffix}")
                 target = resolve_target(cfg, info)
-                print(f"    selected {target.base}: {client.read_gain(target):+.1f} dB (read-only)")
-                print("    the app performs no writes")
+                _out(f"    selected {target.base}: {client.read_gain(target):+.1f} dB (read-only)")
+                _out("    the app performs no writes")
     except VoicemeeterDllNotFound as exc:
         record("Voicemeeter connection", "FAIL", str(exc).replace("\n", " "))
     except Exception as exc:
@@ -201,8 +213,8 @@ def selftest(demo: bool) -> int:
     passed = sum(1 for status, _, _ in results if status == "PASS")
     failed = sum(1 for status, _, _ in results if status == "FAIL")
     warned = sum(1 for status, _, _ in results if status == "WARN")
-    print()
-    print(f"{passed} passed, {failed} failed, {warned} warning(s)")
+    _out()
+    _out(f"{passed} passed, {failed} failed, {warned} warning(s)")
     return 0 if failed == 0 else 1
 
 
@@ -250,7 +262,7 @@ def main(argv: list[str] | None = None) -> int:
     if guard.already_running:
         guard.signal_existing()
         guard.close()
-        print("VoiceMeeter Volume OSD is already running (tray). Asked it to open settings.")
+        _out("VoiceMeeter Volume OSD is already running (tray). Asked it to open settings.")
         return 0
 
     try:

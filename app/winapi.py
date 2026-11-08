@@ -170,8 +170,11 @@ class InstanceGuard:
     """Named mutex + event: second launch asks the first one to show settings."""
 
     def __init__(self, app_id: str):
+        # CreateMutexW only sets ERROR_ALREADY_EXISTS when the object exists;
+        # clearing the thread's last error first avoids a stale value.
+        ctypes.set_last_error(0)
         self._mutex = kernel32.CreateMutexW(None, False, f"Local\\{app_id}.mutex")
-        self.already_running = ctypes.get_last_error() == ERROR_ALREADY_EXISTS
+        self.already_running = bool(self._mutex) and ctypes.get_last_error() == ERROR_ALREADY_EXISTS
         self._event = kernel32.CreateEventW(None, False, False, f"Local\\{app_id}.show")
         self._thread: threading.Thread | None = None
 
