@@ -9,7 +9,6 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Iwo24pl/voicemeeter-volume-osd/actions/workflows/tests.yml"><img src="https://github.com/Iwo24pl/voicemeeter-volume-osd/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
   <img src="https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D6?logo=windows&logoColor=white" alt="Windows 10 / 11">
   <img src="https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white" alt="Python 3.10+">
   <img src="https://img.shields.io/badge/license-MIT-2ea44f" alt="MIT">
